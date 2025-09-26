@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calendário de Prazos — Procedimentos e Entregas | Grupo Ora</title>
+<meta name="description" content="E-book operacional: prazos, entregas e canais — Folha, Fiscal & Tributos, Contábil.">
+<style>
+  :root {
+    --navy:   #04294B; /* confiança, estabilidade */
+    --orange: #FF7A00; /* energia, destaque */
+    --slate:  #708090; /* seriedade, sofisticação */
+    --green:  #2ECC71; /* crescimento, sucesso */
+    --ink:    #111827;
+    --muted:  #f6f8fb;
+    --paper:  #ffffff;
+    --line:   #e5e7eb;
+    --bggrad: radial-gradient(1200px 600px at 0% 0%, #04294B10 0%, transparent 60%),
+              radial-gradient(1200px 600px at 100% 0%, #FF7A0012 0%, transparent 60%);
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  }
+
+  /* ===== Layout ===== */
+  .shell {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 28px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 64px;
+    background: var(--bggrad);
+  }
+
+  aside.toc {
+    position: sticky;
+    top: 16px;
+    height: calc(100vh - 24px);
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--paper);
+    overflow: auto;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
+  }
+  .brand .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px #FF7A0020; }
+  .brand h1 {
+    font-size: 16px; margin: 0; letter-spacing: .3px; color: var(--navy);
+  }
+  .toc .ver { font-size: 12px; color: #6b7280; }
+  .toc nav { margin-top: 12px; }
+  .toc a {
+    display: block;
+    padding: 8px 10px;
+    margin: 4px 0;
+    border-radius: 10px;
+    color: #374151; text-decoration: none; border: 1px solid transparent;
+  }
+  .toc a:hover { background: var(--muted); border-color: var(--line); }
+  .toc .group { margin-top: 12px; color: var(--slate); font-weight: 700; font-size: 13px; }
+  .toc .sub a { padding-left: 18px; font-size: 14px; }
+
+  main {
+    min-width: 0;
+  }
+
+  header.hero {
+    margin: 28px 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 28px 24px;
+    background:
+      radial-gradient(600px 400px at 10% -10%, #04294B0F 0%, transparent 60%),
+      radial-gradient(600px 400px at 110% -10%, #FF7A0013 0%, transparent 60%),
+      var(--paper);
+    position: relative;
+    overflow: hidden;
+  }
+  header.hero .kicker {
+    display: inline-flex; gap: 8px; align-items: center;
+    padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700;
+    color: var(--navy); background: #E7EEF6; border: 1px solid #d6e2ee;
+  }
+  header.hero h2 {
+    font-size: 36px; line-height: 1.15; margin: 10px 0 8px; color: var(--navy);
+  }
+  header.hero p { margin: 6px 0; color: #374151; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 10px; border-radius: 999px; font-size: 12px;
+    background: var(--muted); border: 1px solid var(--line);
+  }
+  .chip svg { width: 14px; height: 14px; }
+
+  .bento {
+    display: grid; gap: 12px;
+    grid-template-columns: repeat(12, 1fr);
+    margin-top: 12px;
+  }
+  .bento .tile {
+    padding: 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--paper);
+  }
+  .tile.orange { background: #FFF5EB; border-color: #ffedd5; }
+  .tile.navy   { background: #F0F6FC; border-color: #dbeafe; }
+  .tile.slate  { background: #F7F7F7; }
+  .span-4 { grid-column: span 4; }
+  .span-6 { grid-column: span 6; }
+  .span-8 { grid-column: span 8; }
+
+  .section { margin: 28px 0; }
+  .section h3 { margin: 0 0 8px 0; color: var(--navy); font-size: 22px; }
+  .section .subtitle { margin: 0; color: #6b7280; font-size: 14px; }
+  .rule { height: 1px; background: var(--line); margin: 12px 0 18px; }
+
+  /* ===== Components ===== */
+  .callout {
+    border-left: 4px solid var(--orange);
+    background: #FFF7F0;
+    padding: 12px 14px; border-radius: 12px; border: 1px solid #ffedd5;
+  }
+  .callout p { margin: 6px 0; }
+  .callout .small { font-size: 13px; color: #6b7280; }
+
+  .grid { display: grid; gap: 12px; }
+  .grid.c2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .grid.c3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+  .card {
+    border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; background: var(--paper);
+  }
+  .card h4 { margin: 0 0 6px 0; color: var(--navy); }
+  .kpi { background: var(--muted); border-radius: 12px; padding: 12px 14px; border: 1px solid var(--line); }
+  .kpi strong { color: var(--navy); }
+
+  .badge { display: inline-block; font-size: 12px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); }
+  .badge.orange { background: #FFF1E6; border-color: #ffd9bd; color: #7a3f00; }
+  .badge.green { background: #ECFDF5; border-color: #bbf7d0; color: #065f46; }
+
+  .timeline {
+    position: relative; padding-left: 20px; margin: 8px 0 6px;
+  }
+  .timeline:before {
+    content:""; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: linear-gradient(var(--orange), var(--navy));
+    border-radius: 2px;
+  }
+  .step {
+    position: relative; margin: 8px 0 14px; padding-left: 16px;
+  }
+  .step:before {
+    content:""; position: absolute; left: -2px; top: 4px;
+    width: 12px; height: 12px; border-radius: 50%; background: var(--paper);
+    border: 2px solid var(--orange); box-shadow: 0 0 0 4px #FF7A0018;
+  }
+  .step .title { color: var(--navy); font-weight: 700; }
+  .step .meta  { font-size: 12px; color: #6b7280; }
+
+  .table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 12px; border: 1px solid var(--line); }
+  .table th, .table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--line); }
+  .table thead th { background: #F3F6FA; color: var(--navy); font-size: 13px; letter-spacing: .2px; }
+  .table tbody tr:nth-child(even) td { background: #FBFCFE; }
+
+  details.accordion { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: var(--paper); }
+  details.accordion + details.accordion { margin-top: 8px; }
+  details.accordion summary { cursor: pointer; list-style: none; font-weight: 700; color: var(--navy); }
+  details.accordion summary::-webkit-details-marker { display: none; }
+  details.accordion[open] { background: #F9FAFB; }
+  details.accordion .content { margin-top: 8px; color: #374151; }
+
+  .weeks { display: grid; grid-template-columns: repeat(3, minmax(180px, 1fr)); gap: 12px; }
+  .week { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: var(--paper); }
+  .week h5 { margin: 0 0 6px; color: var(--navy); }
+
+  .sticky-cta {
+    position: fixed; right: 18px; bottom: 18px;
+    display: flex; flex-direction: column; gap: 10px; z-index: 50;
+  }
+  .fab {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 12px; border-radius: 999px; border: none; cursor: pointer;
+    background: var(--orange); color: white; box-shadow: 0 8px 16px rgba(255,122,0,.2);
+    text-decoration: none; font-weight: 700;
+  }
+  .fab.secondary { background: var(--navy); }
+
+  footer.site {
+    margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line); color: #6b7280; font-size: 13px;
+  }
+
+  /* Print */
+  .page { break-inside: avoid; }
+  .print-break { page-break-before: always; }
+  @media print {
+    aside.toc { display:none; }
+    .shell { grid-template-columns: 1fr; padding: 0; }
+    header.hero { margin-top: 0; border: none; border-radius: 0; }
+    .fab { display:none; }
+  }
+
+  /* Mobile */
+  @media (max-width: 980px) {
+    .shell { grid-template-columns: 1fr; gap: 18px; padding: 0 14px 40px; }
+    aside.toc { position: static; height: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ===== Sticky TOC ===== -->
+  <aside class="toc" aria-label="Sumário">
+    <div class="brand">
+      <span class="dot" aria-hidden="true"></span>
+      <h1>Calendário de Prazos</h1>
+    </div>
+    <div class="ver">Grupo Ora • Versão 25/09/2025</div>
+    <nav>
+      <div class="group">Visão Geral</div>
+      <a href="#boas-vindas">Boas-vindas</a>
+      <a href="#observacoes">Observações importantes</a>
+      <a href="#sumario">Sumário</a>
+
+      <div class="group">Folha de Pagamento</div>
+      <div class="sub">
+        <a href="#folha-prazos">Prazos</a>
+        <a href="#folha-encargos">Encargos</a>
+        <a href="#folha-ferias">Férias</a>
+        <a href="#folha-rescisao">Rescisão</a>
+        <a href="#folha-entregaveis">Entregáveis</a>
+        <a href="#folha-calendario">Calendário (semanas)</a>
+      </div>
+
+      <div class="group">Fiscal &amp; Tributos</div>
+      <div class="sub">
+        <a href="#icms">ICMS</a>
+        <a href="#iss">ISS</a>
+        <a href="#simples">Simples Nacional</a>
+        <a href="#ipi">IPI</a>
+        <a href="#retidos">Impostos Retidos</a>
+        <a href="#piscofins">PIS e COFINS</a>
+        <a href="#fiscal-calendario">Calendário (semanas)</a>
+      </div>
+
+      <div class="group">Contábil</div>
+      <div class="sub">
+        <a href="#contabil-prazos">Prazos</a>
+        <a href="#contabil-entregaveis">Entregáveis</a>
+      </div>
+
+      <div class="group">Canais</div>
+      <div class="sub">
+        <a href="#contatos">Contatos &amp; Canais</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <main>
+
+    <!-- Hero -->
+    <header class="hero page">
+      <span class="kicker">E-book Operacional</span>
+      <h2>Calendário de Prazos — Procedimentos e Entregas</h2>
+      <p>Orientações para envio de informações à contabilidade e recebimento de entregáveis.</p>
+      <div class="chips" role="list">
+        <span class="chip" role="listitem">
+          <!-- calendar icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg> Prazos
+        </span>
+        <span class="chip" role="listitem">
+          <!-- check icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg> Entregáveis
+        </span>
+        <span class="chip" role="listitem">
+          <!-- headset icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 12a8 8 0 0 1 16 0v6a2 2 0 0 1-2 2h-2"/><rect x="2" y="13" width="4" height="6" rx="2"/><rect x="18" y="13" width="4" height="6" rx="2"/>
+          </svg> Canais
+        </span>
+      </div>
+
+      <div class="bento" aria-label="Resumo visual">
+        <div class="tile span-6 orange">
+          <strong>Área do Cliente (Athenas Online)</strong>
+          <p style="margin:6px 0 0">Poste documentos e faça solicitações pelo portal para maior agilidade e rastreabilidade.</p>
+        </div>
+        <div class="tile span-4 navy">
+          <strong>Regra de prazos</strong>
+          <p style="margin:6px 0 0">Cada <em>1 dia útil</em> de atraso no envio <span class="badge orange">acrescenta 1 dia útil</span> no prazo de resposta.</p>
+        </div>
+        <div class="tile span-2 slate">
+          <div class="badge green">Versão 25/09/2025</div>
+          <div class="badge">Grupo Ora</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Boas-vindas -->
+    <section class="section page" id="boas-vindas">
+      <h3>Boas-vindas</h3>
+      <p class="subtitle">Estamos muito satisfeitos em contribuir com o alinhamento contábil e tributário da sua empresa.</p>
+      <div class="rule"></div>
+      <p>Este e-book apresenta, de forma objetiva e assertiva, a organização dos prazos e entregas de <strong>Folha de Pagamento</strong>, <strong>Fiscal &amp; Tributos</strong> e <strong>Contabilidade</strong>, além dos <strong>Canais de Atendimento</strong>. Todas as diretrizes foram estruturadas a partir do material original do <em>Calendário de Prazos de Procedimentos e Entregas</em>. </p>
+    </section>
+
+    <!-- Observações -->
+    <section class="section" id="observacoes">
+      <h3>Observações importantes</h3>
+      <div class="callout">
+        <p><strong>Prazos dependem do momento da solicitação.</strong> Envie documentos e dados pelo <em>Athenas Online</em> para garantir priorização e controle de status.</p>
+        <p class="small">Regra operacional: para cada <strong>1 dia útil</strong> de atraso no envio, <strong>1 dia útil</strong> é adicionado ao prazo de resposta.</p>
+      </div>
+    </section>
+
+    <!-- Sumário rápido em cards -->
+    <section class="section page" id="sumario">
+      <h3>Sumário</h3>
+      <div class="grid c3">
+        <a class="card" href="#folha-prazos"><h4>Folha — prazos</h4><p>Variáveis, prévia, devolutiva e reenvio.</p></a>
+        <a class="card" href="#folha-encargos"><h4>Folha — encargos</h4><p>IRRF e INSS com DCTF/DCTFWeb.</p></a>
+        <a class="card" href="#folha-ferias"><h4>Férias</h4><p>Aviso com margem operacional + folha.</p></a>
+        <a class="card" href="#folha-rescisao"><h4>Rescisão</h4><p>Aviso prévio e folha de rescisão.</p></a>
+        <a class="card" href="#icms"><h4>ICMS</h4><p>Apuração, DIFAL, Complemento, SPED.</p></a>
+        <a class="card" href="#piscofins"><h4>PIS/COFINS</h4><p>SPED Contribuições e entregáveis.</p></a>
+      </div>
+    </section>
+
+    <!-- Folha de Pagamento -->
+    <section class="section page print-break" id="folha-prazos">
+      <h3>1) Folha de Pagamento — prazos</h3>
+      <div class="timeline">
+        <div class="step">
+          <div class="title">Mês anterior — Variáveis</div>
+          <div class="meta">Até o <strong>antepenúltimo dia útil</strong> do mês anterior ao pagamento.</div>
+        </div>
+        <div class="step">
+          <div class="title">1º dia útil — Prévia</div>
+          <div class="meta">Envio da prévia para conferência e validação das variáveis.</div>
+        </div>
+        <div class="step">
+          <div class="title">3º dia útil — Devolutiva (se houver)</div>
+          <div class="meta">Retorno de acertos necessários.</div>
+        </div>
+        <div class="step">
+          <div class="title">4º dia útil — Reenvio (se houver)</div>
+          <div class="meta">Em até 24 horas após a devolutiva.</div>
+        </div>
+      </div>
+
+      <details class="accordion">
+        <summary>Arquivos a serem encaminhados</summary>
+        <div class="content">
+          <ul>
+            <li>Contracheques.</li>
+            <li>Guia de FGTS.</li>
+            <li>Relatório de Encargos.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="section" id="folha-encargos">
+      <h3>1.1) Encargos (guias)</h3>
+      <table class="table">
+        <thead><tr><th>Quando</th><th>Guia</th><th>Observações</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1º dia útil</strong></td><td>IRRF</td><td>Consolidado para a DCTF.</td></tr>
+          <tr><td><strong>10º dia útil</strong></td><td>INSS</td><td>Consolidado via eSocial + DCTFWeb.</td></tr>
+        </tbody>
+      </table>
+      <details class="accordion">
+        <summary>Arquivos a serem encaminhados</summary>
+        <div class="content">
+          <ul>
+            <li>Guias de INSS e IRRF.</li>
+            <li>Detalhamento da contribuição.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="section" id="folha-ferias">
+      <h3>1.2) Férias</h3>
+      <div class="grid c2">
+        <div class="card">
+          <h4>35 dias antes — <span class="badge orange">Aviso de Férias</span></h4>
+          <p>CLT exige 30 dias; adotamos margem operacional.</p>
+        </div>
+        <div class="card">
+          <h4>10 dias antes — Folha de Férias</h4>
+          <p>Envio para conferência.</p>
+        </div>
+      </div>
+      <details class="accordion">
+        <summary>Arquivos a serem encaminhados</summary>
+        <div class="content">
+          <ul>
+            <li>Folha de Férias.</li>
+            <li>Aviso de Férias.</li>
+            <li>Guias de pagamento.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="section" id="folha-rescisao">
+      <h3>1.3) Rescisão</h3>
+      <div class="grid c2">
+        <div class="card">
+          <h4>35 dias antes — Aviso Prévio</h4>
+          <p>Mínimo legal: 30 dias.</p>
+        </div>
+        <div class="card">
+          <h4>5 dias após o término do aviso — Folha de Rescisão</h4>
+          <p>Envio da folha de rescisão.</p>
+        </div>
+      </div>
+      <details class="accordion">
+        <summary>Arquivos a serem encaminhados</summary>
+        <div class="content">
+          <ul>
+            <li>Folha de Rescisão.</li>
+            <li>Aviso Prévio.</li>
+            <li>Guias de pagamento.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="section" id="folha-entregaveis">
+      <h3>1.4) Entregáveis de Folha</h3>
+      <div class="grid c3">
+        <div class="kpi"><strong>Folha</strong><ul><li>Contracheques</li><li>Guia de FGTS</li><li>Relatório de Encargos</li></ul></div>
+        <div class="kpi"><strong>Encargos</strong><ul><li>Guias de INSS e IRRF</li><li>Detalhamento das contribuições</li></ul></div>
+        <div class="kpi"><strong>Eventos</strong><ul><li>Férias: Aviso, Folha e Guias</li><li>Rescisão: Aviso, Folha e Guias</li></ul></div>
+      </div>
+    </section>
+
+    <section class="section" id="folha-calendario">
+      <h3>1.5) Calendário de Folha (por semanas)</h3>
+      <div class="weeks">
+        <div class="week"><h5>Semana 1</h5><p>Envio de <strong>variáveis</strong> da folha.</p></div>
+        <div class="week"><h5>Semana 2</h5><p><strong>Entrega</strong> da folha.</p></div>
+        <div class="week"><h5>Semana 4</h5><p><strong>Envio</strong> das guias.</p></div>
+      </div>
+    </section>
+
+    <!-- Fiscal & Tributos -->
+    <section class="section page print-break" id="icms">
+      <h3>2) Fiscal &amp; Tributos</h3>
+      <p class="subtitle">Prazos, trabalhos executados e entregáveis por tributo.</p>
+      <div class="rule"></div>
+
+      <details class="accordion" open>
+        <summary>2.1 ICMS — prazos, trabalhos e entregáveis</summary>
+        <div class="content">
+          <div class="timeline">
+            <div class="step"><div class="title">5º dia útil — Liberação fiscal</div><div class="meta">Finalização de entradas/serviços e conferências.</div></div>
+            <div class="step"><div class="title">10º dia útil — Guia de ICMS</div><div class="meta">Encaminhamento da guia.</div></div>
+          </div>
+          <div class="grid c2">
+            <div class="card">
+              <h4>Trabalhos executados</h4>
+              <ul>
+                <li>Auditoria de notas fiscais</li>
+                <li>Apuração do ICMS</li>
+                <li>Cálculo do DIFAL</li>
+                <li>Antecipação Parcial</li>
+                <li>Complemento Atacadista</li>
+                <li>Geração do <strong>SPED Fiscal</strong></li>
+                <li>Livros Fiscais</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4>Entregáveis</h4>
+              <ul>
+                <li>Guias: <strong>ICMS + DIFAL + Complemento</strong></li>
+                <li>Relatório de apuração (registro + resumo)</li>
+                <li>Painel de entradas/saídas (Excel)</li>
+                <li>Livros de Entrada e Saída</li>
+                <li>Recibo da <strong>EFD Fiscal</strong> + arquivo do SPED Fiscal</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="accordion" id="iss">
+        <summary>2.2 ISS — prazos e entregáveis</summary>
+        <div class="content">
+          <div class="timeline">
+            <div class="step"><div class="title">Último dia útil — Emissão de NFs</div></div>
+            <div class="step"><div class="title">5º dia útil — Guia de ISS</div></div>
+          </div>
+          <div class="grid c2">
+            <div class="card">
+              <h4>Entregáveis</h4>
+              <ul>
+                <li>Guia de ISS <strong>Prestador</strong> e <strong>Tomador</strong></li>
+                <li>Relatório de serviços tomados e prestados</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="accordion" id="simples">
+        <summary>2.3 Simples Nacional — prazos e entregáveis</summary>
+        <div class="content">
+          <div class="timeline">
+            <div class="step"><div class="title">Último dia útil — Liberação fiscal</div></div>
+            <div class="step"><div class="title">10º dia útil — Guia do Simples</div></div>
+          </div>
+          <div class="grid c2">
+            <div class="card">
+              <h4>Entregáveis</h4>
+              <ul>
+                <li>DAS do Simples Nacional</li>
+                <li>Extrato de apuração</li>
+                <li>Livro de Entrada e Saída</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="accordion" id="ipi">
+        <summary>2.4 IPI — prazos e entregáveis</summary>
+        <div class="content">
+          <div class="timeline">
+            <div class="step"><div class="title">5º dia útil — Liberação fiscal</div></div>
+            <div class="step"><div class="title">10º dia útil — Guia de IPI</div></div>
+          </div>
+          <div class="grid c2">
+            <div class="card">
+              <h4>Entregáveis</h4>
+              <ul>
+                <li>Guia de IPI</li>
+                <li>Extrato de apuração</li>
+                <li>Livro de Entrada e Saída</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="accordion" id="retidos">
+        <summary>2.5 Impostos Retidos — prazos e entregáveis</summary>
+        <div class="content">
+          <div class="timeline">
+            <div class="step"><div class="title">5º dia útil — Liberação fiscal</div></div>
+            <div class="step"><div class="title">10º dia útil — Guias de retidos</div></div>
+          </div>
+          <div class="grid c2">
+            <div class="card">
+              <h4>Entregáveis</h4>
+              <ul>
+                <li>Guias de impostos retidos</li>
+                <li>Relatório das notas que compuseram as retenções</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="accordion" id="piscofins">
+        <summary>2.6 PIS e COFINS — prazos, trabalhos e entregáveis</summary>
+        <div class="content">
+          <div class="timeline">
+            <div class="step"><div class="title">5º dia útil — Liberação fiscal</div></div>
+            <div class="step"><div class="title">15º dia útil — Guia de PIS/COFINS</div></div>
+          </div>
+          <div class="grid c2">
+            <div class="card">
+              <h4>Trabalhos executados</h4>
+              <ul>
+                <li>Auditoria de notas fiscais</li>
+                <li>Apuração de PIS/COFINS</li>
+                <li>Geração do <strong>SPED Contribuições</strong></li>
+                <li>Livros Fiscais</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4>Entregáveis</h4>
+              <ul>
+                <li>Guia de PIS e COFINS</li>
+                <li>Relatório de conferência das notas</li>
+                <li>Composição da apuração (incluindo redução de ICMS na base, quando aplicável)</li>
+                <li>Painel de entradas e saídas</li>
+                <li>Recibo da <strong>EFD Contribuições</strong> + arquivo do SPED</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <section class="section" id="fiscal-calendario">
+        <h3>2.7) Calendário Fiscal (por semanas)</h3>
+        <div class="weeks">
+          <div class="week"><h5>Semana 1</h5><p><strong>Fim</strong> dos registros de notas.</p></div>
+          <div class="week"><h5>Semana 2</h5><p><strong>Entrega</strong> dos dados.</p></div>
+          <div class="week"><h5>Semana 4</h5><p><strong>Envio</strong> das guias de impostos.</p></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- Contábil -->
+    <section class="section page print-break" id="contabil-prazos">
+      <h3>3) Contábil — prazos</h3>
+      <div class="timeline">
+        <div class="step"><div class="title">3º dia útil — Postagem de documentos</div><div class="meta">Extratos, contratos, NFS-e tomadas etc.</div></div>
+        <div class="step"><div class="title">5º dia útil — Validação da documentação</div></div>
+        <div class="step"><div class="title">6º dia útil — Repostagem (se houver)</div></div>
+        <div class="step"><div class="title">15º dia útil — 1º Balancete</div></div>
+        <div class="step"><div class="title">18º dia útil — Devolutiva</div></div>
+        <div class="step"><div class="title">22º dia útil — Balancete final</div></div>
+      </div>
+    </section>
+
+    <section class="section" id="contabil-entregaveis">
+      <h3>3.1) Entregáveis Contábeis</h3>
+      <div class="grid c2">
+        <div class="kpi"><strong>Rotina mensal</strong><ul><li>Balancete consolidado</li><li>DRE</li><li>DFC</li></ul></div>
+        <div class="kpi"><strong>Gestão</strong><ul><li>Índices econômicos e financeiros</li></ul></div>
+      </div>
+    </section>
+
+    <!-- Canais -->
+    <section class="section page print-break" id="contatos">
+      <h3>4) Contatos &amp; Canais</h3>
+      <div class="grid c2">
+        <div class="card">
+          <h4>Telefones</h4>
+          <ul>
+            <li>Ligação: <a href="tel:+552730200242">(27) 3020-0242</a></li>
+            <li>WhatsApp: <a href="https://wa.me/5527992368862">(27) 99236-8862</a></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>E-mails operacionais</h4>
+          <ul>
+            <li>Onboard: <a href="mailto:junior@grupoora.com.br">junior@grupoora.com.br</a></li>
+            <li>Contábil: <a href="mailto:contabil@grupoora.com.br">contabil@grupoora.com.br</a></li>
+            <li>Fiscal: <a href="mailto:fiscal@grupoora.com.br">fiscal@grupoora.com.br</a></li>
+            <li>Folha: <a href="mailto:folha@grupoora.com.br">folha@grupoora.com.br</a></li>
+            <li>Gestores: <a href="mailto:gestores@grupoora.com.br">gestores@grupoora.com.br</a></li>
+            <li>Societário: <a href="mailto:societario@grupoora.com.br">societario@grupoora.com.br</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <h4>Endereço &amp; Redes</h4>
+        <p>Rua José Alexandre Buaiz, 350, Salas 2013 e 2007 — Enseada do Suá — Vitória/ES</p>
+        <p>Consultoria | Auditoria | Contabilidade | Treinamentos</p>
+        <p><a href="mailto:contato@grupoora.com.br">contato@grupoora.com.br</a> · <a href="https://www.facebook.com/grupooraa/">Facebook</a> · <a href="https://www.instagram.com/grupoora">@grupoora</a></p>
+      </div>
+    </section>
+
+    <footer class="site">
+      <p>Material refatorado a partir do e-book original fornecido pelo cliente. © Grupo Ora — 2025</p>
+    </footer>
+
+  </main>
+</div>
+
+<!-- Floating actions -->
+<div class="sticky-cta" aria-hidden="true">
+  <a class="fab" href="#contatos">Falar com a Ora</a>
+  <a class="fab secondary" href="#sumario">Ir para o Sumário</a>
+</div>
+
+</body>
+</html>
